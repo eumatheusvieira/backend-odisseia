@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const Inscricao = require('../models/Inscricao');
 const enviarEmailConfirmacao = require('../utils/email');
+const calcularVagasRestantes = require('../utils/vagasRestantes')
 
 exports.criarInscricao = async (req, res) => {
   const { nome, email, telefone } = req.body;
@@ -10,7 +11,7 @@ exports.criarInscricao = async (req, res) => {
     if (vagasRestantes <= 0) {
       return res.status(400).json({ mensagem: 'Vagas esgotadas' });
     }
-    
+
     const token = crypto.randomBytes(20).toString('hex');
 
     const novaInscricao = await Inscricao.create({
