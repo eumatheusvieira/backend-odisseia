@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { criarInscricao, listarInscricoes } = require('../controllers/inscricaoController');
 const auth = require('../middlewares/auth');
+const calcularVagasRestantes = require('../utils/vagasRestantes');
 
 // Rota pública para se inscrever
 router.post('/', criarInscricao);
@@ -11,11 +12,10 @@ router.get('/', auth, listarInscricoes);
 
 router.get('/vagas', async (req, res) => {
     try {
-      const countConfirmadas = await Inscricao.countDocuments({ status: 'confirmada' });
-      const vagasRestantes = MAX_VAGAS - countConfirmadas;
-      res.json({ vagasRestantes: vagasRestantes > 0 ? vagasRestantes : 0 });
-    } catch (error) {
-      res.status(500).json({ mensagem: 'Erro no servidor' });
+      const vagasRestantes = await calcularVagasRestantes();
+      res.json({ vagasRestantes });
+    } catch (err) {
+      res.status(500).json({ mensagem: 'Erro ao calcular vagas' });
     }
   });
   

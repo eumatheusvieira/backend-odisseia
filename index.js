@@ -7,7 +7,6 @@ const authRoutes = require('./routes/auth');
 const inscricaoRoutes = require('./routes/inscricao');
 const confirmacaoRoutes = require('./routes/confirmacao');
 const pdfRoutes = require('./routes/pdf');
-const MAX_VAGAS = parseInt(process.env.MAX_VAGAS) || 100;
 
 dotenv.config();
 const app = express();

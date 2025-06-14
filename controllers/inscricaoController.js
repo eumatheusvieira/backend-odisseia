@@ -4,10 +4,10 @@ const enviarEmailConfirmacao = require('../utils/email');
 
 exports.criarInscricao = async (req, res) => {
   const { nome, email, telefone } = req.body;
+  const vagasRestantes = await calcularVagasRestantes();
 
   try {
-    const countConfirmadas = await Inscricao.countDocuments({ status: 'confirmada' });
-    if (countConfirmadas >= MAX_VAGAS) {
+    if (vagasRestantes <= 0) {
       return res.status(400).json({ mensagem: 'Vagas esgotadas' });
     }
     
