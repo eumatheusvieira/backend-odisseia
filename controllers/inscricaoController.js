@@ -6,6 +6,11 @@ exports.criarInscricao = async (req, res) => {
   const { nome, email, telefone } = req.body;
 
   try {
+    const countConfirmadas = await Inscricao.countDocuments({ status: 'confirmada' });
+    if (countConfirmadas >= MAX_VAGAS) {
+      return res.status(400).json({ mensagem: 'Vagas esgotadas' });
+    }
+    
     const token = crypto.randomBytes(20).toString('hex');
 
     const novaInscricao = await Inscricao.create({
